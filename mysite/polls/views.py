@@ -1,25 +1,23 @@
-from django.http import HttpResponse
-from django.http import Http404
-from django.shortcuts import render
+desde django.http import HttpResponse
+desde django.http import Http404
+de django.shortcuts import render
 
-from .models import Question
+de .models importar Pregunta
 
-def index(request):
-    latest_question_list = Question.objects.order_by('-pub_date')[:5]
-    template = loader.get_template('polls/index.html')
+def index (solicitud):
+    latest_question_list = Question.objects.order_by ('- pub_date') [: 5]
+    template = loader.get_template ('polls / index.html')
     context = {'latest_question_list': latest_question_list,}
-    return render(request, 'polls/index.html', context)
+    return render (solicitud, 'polls / index.html', contexto)
     
-def detail(request, question_id):
-    return HttpResponse("You're looking at question %s." % question_id)
 
-def results(request, question_id):
-    response = "You're looking at the results of question %s."
-    return HttpResponse(response % question_id)
+def resultados (solicitud, question_id):
+    response = "Estás viendo los resultados de la pregunta% s".
+    return HttpResponse (respuesta% question_id)
 
-def vote(request, question_id):
-    return HttpResponse("You're voting on question %s." % question_id)
+def vote (solicitud, question_id):
+    return HttpResponse ("Estás votando en la pregunta% s."% question_id)
 
-def detail(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
-    return render(request, 'polls/detail.html', {'question': question})
+def detalle (solicitud, question_id):
+    question = get_object_or_404 (Pregunta, pk = question_id)
+    return render (solicitud, 'polls / detail.html', {'question': question})
