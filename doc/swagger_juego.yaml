@@ -1,0 +1,142 @@
+openapi: 3.0.0
+info:
+  title: Tormentor x Ubermosh API
+  description: API para el desarrollo del juego Tormentor x Ubermosh frontend y backend en el curso DAM2 (CPR Afundacion).
+
+servers:
+  - url: http://127.0.0.1:8000/
+  
+paths:
+  /usuario:
+    post:
+      summary: Crea un nuevo usuario y su primera puntuación        
+      requestBody:
+        description: Datos del usuario para su registro
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                  example: "Juan"
+                contraseña:
+                  type: string
+                  format: password
+                  example: "hola"
+                puntuacion:
+                  type: int
+                  format: int32
+                  example: 1000
+      responses:
+        '201':
+          description: Usuario registrado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionCookie:
+                    type: string
+                    description: Nombre de usuario concatenado con 16 bytes aleatorios codificados en base64 mediante el carácter slash (/)
+                    example: juan/oa3RzvErZYb8GK9AM+LZGw==
+        '400':
+          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Falta nombre de usuario o contraseña"
+        '409':
+          description: Ya existe una sesión activa para el usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "No se puede iniciar sesión dos veces"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
+  /usuario/{username}:
+    post:
+      summary: Crea un nuevo usuario y su primera puntuación
+      parameters:
+        - name: usuario
+          in: path
+          requred: true
+          schema:
+            type: string
+            example: "Juan"
+          description: El nombre del usuario tal y como está almacenado en la base de datos
+      requestBody:
+        description: Datos del usuario para el registro
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                contraseña:
+                  type: string
+                  format: password
+                  example: "hola"
+                puntuacion:
+                  type: int
+                  format: int32
+                  example: 1000
+      responses:
+        '200':
+          description: Se ha iniciado una nueva sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionCookie:
+                    type: string
+                    description: Nombre de usuario concatenado con 16 bytes aleatorios codificados en base64 mediante el carácter slash (/)
+                    example: juan/oa3RzvErZYb8GK9AM+LZGw==
+        '400':
+          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Falta la contraseña"
+        '401':
+          description: Petición desautorizada 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Contraseña incorrecta"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
