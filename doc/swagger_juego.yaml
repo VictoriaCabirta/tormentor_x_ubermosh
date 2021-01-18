@@ -122,7 +122,7 @@ paths:
                     example: "Inténtalo de nuevo más tarde"
   /usuario/{username}:
     post:
-      summary: Crea un nuevo usuario y su primera puntuación
+      summary: Registra una nueva puntuación de un usuario ya registrado
       parameters:
         - name: usuario
           in: path
