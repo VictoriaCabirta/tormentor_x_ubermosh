@@ -23,7 +23,8 @@ public class Disparar : MonoBehaviour
     private float angulo;
     //public ControladorMenu ControladorMenu;
     ControladorMenu ControladorMenu;
-
+    Joystick joystickArma;
+    public GameObject fondoArma;
     AudioSource sourceDisparo;
     //public AudioClip clipDisparo;
 
@@ -35,6 +36,7 @@ public class Disparar : MonoBehaviour
 
         //Le decimos fijo que tine que buscar este componente
         ControladorMenu = GameObject.FindWithTag("MenuP").GetComponent<ControladorMenu>();
+        joystickArma = GameObject.FindGameObjectWithTag("JoystickDisparo").GetComponent<Joystick>();
 
         //En relacion a si es player o enemigo, toma una accion u otra
         #region DifPlayerEnemigo
@@ -63,9 +65,12 @@ public class Disparar : MonoBehaviour
         }
         else
         {
-            direccion = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+
+            direccion = joystickArma.Direction;
+            //direccion = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
         }
         #endregion
+
 
         //Con esto, solo se podra disparar pasado un tiempo x
         #region Contador
@@ -78,16 +83,22 @@ public class Disparar : MonoBehaviour
                 if (!player)
                 {
                     Disparo();
-                    contDisp = 0;
                 }
                 else
                 {
+
+                    if (fondoArma.activeSelf)
+                    {
+                        Disparo();
+                    }
+
+
                     //Si el player dispara, se genera la bala y el sonido del siparo
                     if (Input.GetMouseButtonDown(0))
                     {
-                        sourceDisparo.PlayOneShot(sourceDisparo.clip, 1);
-                        Disparo();
-                        contDisp = 0;
+                        
+                        //Disparo();
+
                     }
                 }
             }
@@ -103,14 +114,21 @@ public class Disparar : MonoBehaviour
     }
 
     //Metodo que se hace para disparar
-    private void Disparo()
+    public void Disparo()
     {
+
+        if (player)
+        {
+            sourceDisparo.PlayOneShot(sourceDisparo.clip, 1);
+        }
 
         //Con esto creamos un objeto el cual tiene las caracteristicas de ser una bala, la posicion actual (que es la pos del arma), y la rotacion del la misma
         GameObject bala = Instantiate(balaPrefab, arma.position, arma.rotation);
 
         //Con esto haces que vaya a una velocidad de 10 px (creo que son px) y que salga por la parte de arriba del arma
         bala.GetComponent<Rigidbody2D>().velocity = arma.up * 10;
+
+        contDisp = 0;
 
     }
 

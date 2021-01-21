@@ -6,10 +6,18 @@ public class MoverPlayer : MonoBehaviour
 {
     //Variables que uso en este script
     #region Variables
+
+    Joystick joystickMovimiento;
+
     public ControladorMenu ControladorMenu;
     public float speed;
     private float vel;
     #endregion
+
+    void Awake()
+    {
+        joystickMovimiento = GameObject.FindGameObjectWithTag("joystickMovimiento").GetComponent<Joystick>();
+    }
 
     //Metodo que se ejecuta en cada frame
     void Update()
@@ -41,6 +49,12 @@ public class MoverPlayer : MonoBehaviour
         {
             transform.position = new Vector2(transform.position.x + vel * Time.deltaTime, transform.position.y);
         }
+        #endregion
+
+        //Debug.Log(joystickMovimiento.Horizontal + " / " + joystickMovimiento.Vertical);
+
+        #region MovimientoJoystick
+        transform.position = new Vector2(transform.position.x + (joystickMovimiento.Horizontal / 10), transform.position.y + (joystickMovimiento.Vertical / 10));
         #endregion
     }
 }
