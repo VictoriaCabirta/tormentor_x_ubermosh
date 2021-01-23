@@ -17,6 +17,7 @@ public class GenerarEnemigos : MonoBehaviour
     private bool en = true;
 
     ControladorMenu ControladorMenu;
+    Transform playerPos;
     #endregion
 
     //Se activa al inicio del juego
@@ -24,6 +25,7 @@ public class GenerarEnemigos : MonoBehaviour
     {
         contMaxInicial = contMax;
         ControladorMenu = GameObject.FindWithTag("MenuP").GetComponent<ControladorMenu>();
+        playerPos = GameObject.FindWithTag("Player").GetComponent<Transform>();
     }
 
     //Se activa cada frame
@@ -41,9 +43,17 @@ public class GenerarEnemigos : MonoBehaviour
             if (!en)
             {
 
-                Vector2 posAleat;
+                //Este bucle es para que, si se va a generar un generaenemigos cerca del player, vuelve a calcular otra posicion               
+                #region CalcularPosicion
 
-                posAleat = new Vector2(Random.Range(-20, 20), Random.Range(-20, 20));
+                Vector3 posAleat;
+
+                do
+                {
+                    posAleat = new Vector3(Random.Range(-20, 20), Random.Range(-20, 20), 0);
+                } while (Vector3.Distance(posAleat, playerPos.position) < 15);
+                #endregion
+
                 GameObject malo = Instantiate(enemigo, posAleat, transform.rotation);
 
             }
@@ -59,4 +69,7 @@ public class GenerarEnemigos : MonoBehaviour
         #endregion
 
     }
+
+
+
 }

@@ -99,6 +99,7 @@ MonoBehaviour:
   balaPrefab: {fileID: 8141538330045237775, guid: d6056426c61a60b4782d0c634a105053, type: 3}
   player: 0
   contMax: 3
+  fondoArma: {fileID: 0}
 --- !u!1 &8156377666397410509
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +131,7 @@ Transform:
   m_GameObject: {fileID: 8156377666397410509}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 8, y: 8, z: 1}
+  m_LocalScale: {x: 15, y: 15, z: 1}
   m_Children:
   - {fileID: 8156377664834967631}
   m_Father: {fileID: 0}
@@ -270,7 +271,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8156377666397410509}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: f0d9f8c8bfd158b408c1e1ac027664cd, type: 3}
