@@ -51,7 +51,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
     public void addControlsToUnityFrame() {
         FrameLayout layout = mUnityPlayer;
         {
-            Button myButton = new Button(this);
+            /*Button myButton = new Button(this);
             myButton.setText("Show Main");
             myButton.setX(10);
             myButton.setY(500);
@@ -102,7 +102,7 @@ public class MainUnityActivity extends OverrideUnityActivity {
                     finish();
                 }
             });
-            layout.addView(myButton, 300, 200);
+            layout.addView(myButton, 300, 200);*/
         }
     }
 

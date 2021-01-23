@@ -3,6 +3,7 @@
     package="com.unity.mynativeapp" >
 
     <application
+        android:screenOrientation="portrait"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,6 +13,7 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
+
             android:theme="@style/AppTheme.NoActionBar" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.unity.mynativeapp.MainUnityActivity" android:screenOrientation="fullSensor" android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density" android:hardwareAccelerated="false" android:process=":Unity"
+        <activity android:name="com.unity.mynativeapp.MainUnityActivity" android:screenOrientation="landscape" android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale|layoutDirection|density" android:hardwareAccelerated="false" android:process=":Unity"
             android:label="@string/app_name">
         </activity>
     </application>
