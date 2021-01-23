@@ -9,6 +9,9 @@ TagManager:
   - BalaEnemigo
   - Puntuacion
   - MenuP
+  - joystickMovimiento
+  - JoystickDisparo
+  - EsPC
   layers:
   - Default
   - TransparentFX
