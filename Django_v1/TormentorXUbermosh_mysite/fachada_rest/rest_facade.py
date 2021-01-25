@@ -12,13 +12,12 @@ def obtener_puntuacion(request):
 
     puntuaciones = mostrar_lista_puntuacion()
     
-    if puntuaciones is None:
-        return JsonResponse({"errorDescription": "Tenemos un fallo, inténtalo más tarde"}, status=404)
-    
     respuesta = []
     for usr in puntuaciones:
         info_jugadores = { 'nombre': usr.nombre, 'puntuacion': usr.puntuacion }
         respuesta.append(info_jugadores)
+
+    respuesta = sorted(respuesta, key=ordenar_json, reverse=True)
 
     return JsonResponse(respuesta, safe=False, status=200)
 
@@ -28,4 +27,5 @@ def mostrar_lista_puntuacion():
     except Usuarios.DoesNotExist:
         return None
 
-
+def ordenar_json(punt):
+	return punt["puntuacion"]
