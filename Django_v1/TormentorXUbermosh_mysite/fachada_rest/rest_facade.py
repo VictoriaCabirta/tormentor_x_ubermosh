@@ -6,17 +6,17 @@ from django.http import HttpResponseNotAllowed, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
-def get_puntuacion(request):
+def obtener_puntuacion(request):
     if request.method != 'GET':
         return HttpResponseNotAllowed(['GET'])
 
-    lista = mostrar_lista_puntuacion()
+    puntuaciones = mostrar_lista_puntuacion()
     
-    if lista is None:
+    if puntuaciones is None:
         return JsonResponse({"errorDescription": "Tenemos un fallo, inténtalo más tarde"}, status=404)
     
     respuesta = []
-    for usr in lista:
+    for usr in puntuaciones:
         info_jugadores = { 'nombre': usr.nombre, 'puntuacion': usr.puntuacion }
         respuesta.append(info_jugadores)
 
