@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Encuesta</title>
+	</head>
+	<body>
+		{% if puntuaciones %}
+		<ul>
+			{% for puntuacion in puntuaciones %}
+			<li><a href="{% url 'fachada_rest:detail' usuarios.id %}">{{ usuarios.nombre }}</a></li>
+			{% endfor %}
+		</ul>
+		{% else %}
+			<p>No hay puntuacines disponibles.</p>
+		{% endif %}
+	</body>
+</html>
+
+
