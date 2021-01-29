@@ -2,12 +2,12 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Encuesta</title>
+		<title>Puntuaciones</title>
 	</head>
 	<body>
-		{% if puntuaciones %}
+		{% if usuarios_list %}
 		<ul>
-			{% for puntuacion in puntuaciones %}
+			{% for usuarios in usuarios_list %}
 			<li><a href="{% url 'fachada_rest:detail' usuarios.id %}">{{ usuarios.nombre }}</a></li>
 			{% endfor %}
 		</ul>
