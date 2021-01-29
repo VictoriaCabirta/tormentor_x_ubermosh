@@ -29,9 +29,8 @@ def mostrar_lista_puntuacion():
 
 def ordenar_json(punt):
 	return punt["puntuacion"]
-	
-	
-	
+
+@csrf_exempt
 def login(request, nombre):
 	#Es POST?, si no lo es devuelve un error
 	if request.method != 'POST':
@@ -55,6 +54,8 @@ def login(request, nombre):
 		return JsonResponse(mi_respuesta, status=200)
 		
 	return JsonResponse({"errorDescription": "Contraseña incorrecta"}, status=401)
+
+@csrf_exempt
 
 def registro(request):
 	# Si recibimos una peticion que no es POST, devolvemos un 405
