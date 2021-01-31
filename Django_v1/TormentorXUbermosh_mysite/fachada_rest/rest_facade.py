@@ -31,14 +31,14 @@ def ordenar_json(punt):
 	return punt["puntuacion"]
 
 @csrf_exempt
-def login(request, nombre):
+def login(request, usuario):
 	#Es POST?, si no lo es devuelve un error
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
 	# Coje un usuario y mira si existe, y si no existe salta el  404
 	try: 
-		usuario = User.objects.get(nombre__exact=nombre)
-	except Usuario.DoesNotExist:
+		usuario = Usuarios.objects.get(nombre__exact=usuario)
+	except Usuarios.DoesNotExist:
 		return JsonResponse({"errorDescription": "Usuario no encontrado, prueba a registrarte o inténtalo más tarde"}, status=404)
 
 	cuerpo_solicitud = json.loads(request.body)
@@ -62,13 +62,13 @@ def registro(request):
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
 	try:
-		usuario=Usuario.objects.get(nombre__exact=nombre)
+		usuario=Usuarios.objects.get(nombre__exact=nombre)
 		return JsonResponse(("Nombre de usuario ya existe"),status=422)
-	except Usuario.DoesNotExist:
+	except Usuarios.DoesNotExist:
 		#obtener la contraseña que quieres asignar
 		cuerpo_solicitud = json.loads(request.body)
 		contrasenaPeticion = cuerpo_solicitud.get('password')
-		usuario=Usuario.get.object(nombre='')
+		usuario=Usuarios.get.object(nombre='')
 		#lanzar un token de sesion
 		usuario.token_sesion = random
 		usuario.save()
