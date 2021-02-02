@@ -8,6 +8,7 @@ public class MoverPlayer : MonoBehaviour
     #region Variables
 
     Joystick joystickMovimiento;
+    EsPC EsPC;
 
     public ControladorMenu ControladorMenu;
     public float speed;
@@ -17,6 +18,7 @@ public class MoverPlayer : MonoBehaviour
     void Awake()
     {
         joystickMovimiento = GameObject.FindGameObjectWithTag("joystickMovimiento").GetComponent<Joystick>();
+        EsPC = GameObject.FindGameObjectWithTag("EsPC").GetComponent<EsPC>();
     }
 
     //Metodo que se ejecuta en cada frame
@@ -31,30 +33,33 @@ public class MoverPlayer : MonoBehaviour
             vel = speed;
         #endregion
 
-        //En el caso de que pulses WASD, el jugador se movera en una posicion o en otra
+        //En el caso de que sea PC, pulsas WASD y el jugador se movera en una posicion o en otra
         #region PusasTecla,Fiesta
-        if (Input.GetKey(KeyCode.W))
+        if (EsPC.esPC)
         {
-            transform.position = new Vector2(transform.position.x, transform.position.y + vel * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            transform.position = new Vector2(transform.position.x - vel * Time.deltaTime, transform.position.y);
-        }
-        if (Input.GetKey(KeyCode.S))
-        {
-            transform.position = new Vector2(transform.position.x, transform.position.y - vel * Time.deltaTime);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            transform.position = new Vector2(transform.position.x + vel * Time.deltaTime, transform.position.y);
+            if (Input.GetKey(KeyCode.W))
+            {
+                transform.position = new Vector2(transform.position.x, transform.position.y + vel * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                transform.position = new Vector2(transform.position.x - vel * Time.deltaTime, transform.position.y);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                transform.position = new Vector2(transform.position.x, transform.position.y - vel * Time.deltaTime);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                transform.position = new Vector2(transform.position.x + vel * Time.deltaTime, transform.position.y);
+            }
         }
         #endregion
 
-        //Debug.Log(joystickMovimiento.Horizontal + " / " + joystickMovimiento.Vertical);
-
+        //Si no es pc, se movera en relacion a los joysticks
         #region MovimientoJoystick
-        transform.position = new Vector2(transform.position.x + (joystickMovimiento.Horizontal / 10), transform.position.y + (joystickMovimiento.Vertical / 10));
+        else if (!ControladorMenu.pausado)
+            transform.position = new Vector2(transform.position.x + (joystickMovimiento.Horizontal / 10), transform.position.y + (joystickMovimiento.Vertical / 10));
         #endregion
     }
 }
