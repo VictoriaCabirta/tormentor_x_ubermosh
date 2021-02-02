@@ -7,55 +7,6 @@ servers:
   - url: http://127.0.0.1:8000/
   
 paths:
-  /puntuacion:
-    get:
-      summary: Devuelve una lista de usuarios
-      responses:
-        '200':
-          description: Lista de todos los usuarios
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    nombre:
-                      type: string
-                      example: Juan
-                    puntuacion:
-                      type: int
-                      example: 1000
-        '400':
-          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errorDescription:
-                    type: string
-                    example: "Inténtalo de nuevo más tarde"
-        '404':
-          description: La lista no existe
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errorDescription:
-                    type: string
-                    example: "No se ha encontrado la lista"
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  errorDescription:
-                    type: string
-                    example: "Inténtalo de nuevo más tarde"
   /usuario:
     post:
       summary: Crea un nuevo usuario y su primera puntuación        
@@ -71,6 +22,10 @@ paths:
                   type: string
                   example: "Juan"
                 contrasena:
+                  type: string
+                  format: password
+                  example: "hola"
+                confirmarContrasena:
                   type: string
                   format: password
                   example: "hola"
@@ -97,19 +52,29 @@ paths:
               schema:
                 type: object
                 properties:
-                  errorDescription:
+                  codigoError:
+                    type: int
+                    description: 0 si los parámetros 'contrasena' y 'confirmacionContrasena' no coinciden. 1 si la contraseña no es suficientemente segura. 2 si el nombre de usuario no es válido
+                    example: 1
+                  mensajeError:
                     type: string
-                    example: "Falta nombre de usuario o contraseña"
+                    description: Mensaje para mostrar al usuario.
+                    example: La contraseña no es suficientemente segura. Por favor, asegúrate de que tiene más de 8 caracteres
         '409':
-          description: Ya existe una sesión activa para el usuario
+          description: Ya existe ese nombre de usuario
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  errorDescription:
+                  codigoError:
+                    type: int
+                    description: 0 Indicamos que el nombre de usuario ya existe
+                    example: 0
+                  mensajeError:
                     type: string
-                    example: "No se puede iniciar sesión dos veces"
+                    description: Mensaje para mostrar al usuario.
+                    example: El nombre de usuario ya existe
         '500':
           description: Error interno del servidor
           content:
@@ -117,12 +82,16 @@ paths:
               schema:
                 type: object
                 properties:
-                  errorDescription:
+                  codigoError:
+                    type: int
+                    description: 0 No conecta con el servidor
+                    example: 0
+                  mensajeError:
                     type: string
                     example: "Inténtalo de nuevo más tarde"
-  /usuario/{username}:
+  /usuario/{username}/login:
     post:
-      summary: Registra una nueva puntuación de un usuario ya registrado
+      summary: Loguear a un usuario y registrar una nueva puntuación
       parameters:
         - name: usuario
           in: path
@@ -132,7 +101,7 @@ paths:
             example: "Juan"
           description: El nombre del usuario tal y como está almacenado en la base de datos
       requestBody:
-        description: Datos del usuario para el registro
+        description: Formato para enviar un POST de login
         required: true
         content:
           application/json:
@@ -179,6 +148,122 @@ paths:
                   errorDescription:
                     type: string
                     example: "Contraseña incorrecta"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"               
+  /usuario/{username}:
+    post:
+      summary: Registrar una nueva puntuación de un usuario logueado
+      parameters:
+        - name: tokenSesion
+          in: header
+          required: false
+          description: Token de sesión devuelto en la petición de login o en la de registro
+      requestBody:
+        description: Formato para enviar un POST de registro de puntuación
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                puntuacion:
+                  type: int
+                  format: int32
+                  example: 1000
+      responses:
+        '201':
+          description: Se ha registrado una nueva puntuación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    description: Mensaje individual.
+                    example: "Has batido tu propio record. ¡Enhorabuena!"
+        '401':
+          description: Error si el token de sesión es incorrecto, no está presente o ha caducado. La aplicación cliente puede optar por lanzar de nuevo la petición de login e intentar publicar de nuevo la puntuación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codigoError:
+                    type: int
+                    description: 9 el token de sesión no es válido
+        '404':
+          description: Error si el nombre de usuario no está registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codigoError:
+                    type: int
+                    description: 8 el nombre de usuario no está registrado en la base de datos
+                    example: 8
+                  mensajeError:
+                    type: string
+                    description: Mensaje para mostrar al usuario.
+                    example: Usuario no encontrado
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
+  /tormentorxubermosh:
+    get:
+      summary: Devuelve una lista de usuarios
+      responses:
+        '200':
+          description: Lista de todos los usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nombre:
+                      type: string
+                      example: Juan
+                    puntuacion:
+                      type: int
+                      example: 1000
+        '400':
+          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
+        '404':
+          description: La lista no existe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "No se ha encontrado la lista"
         '500':
           description: Error interno del servidor
           content:
