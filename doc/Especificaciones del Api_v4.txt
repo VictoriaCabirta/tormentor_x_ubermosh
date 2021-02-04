@@ -1,0 +1,31 @@
+Peticiones al API:
+
+· Registrar un usuario nuevo y su primera puntuación:
+POST /Usuario
+	{"Nombre":"Juan",
+	"Contrasena":"Hola",
+	"ConfirmarContrasena":"Hola",
+	"Puntuacion":1000}
+
+· Loguear a un usuario y registrar una nueva puntuación:
+POST /Usuario/{username}/login
+	{"Nombre":"Juan",
+	"Contrasena":"Hola",
+	"Puntuacion":1000}
+
+· Registrar una nueva puntuación de un usuario logueado:
+POST /Usuario/{username}
+	{"Puntuacion":1000}
+
+· Ver la tabla de puntuaciones globales:
+GET /tormentorxubermosh
+	[
+	{"Nombre":"Juan",
+	"Puntuacion":1000}
+	{"Nombre":"Juan",
+	"Puntuacion":1000}
+	{"Nombre":"Juan",
+	"Puntuacion":1000}
+	{"Nombre":"Juan",
+	"Puntuacion":1000}
+	]

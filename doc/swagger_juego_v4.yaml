@@ -1,0 +1,275 @@
+openapi: 3.0.0
+info:
+  title: Tormentor x Ubermosh API
+  description: API para el desarrollo del juego Tormentor x Ubermosh frontend y backend en el curso DAM2 (CPR Afundacion).
+
+servers:
+  - url: http://127.0.0.1:8000/
+  
+paths:
+  /usuario:
+    post:
+      summary: Crea un nuevo usuario y su primera puntuación        
+      requestBody:
+        description: Datos del usuario para su registro
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                  example: "Juan"
+                contrasena:
+                  type: string
+                  format: password
+                  example: "hola"
+                confirmarContrasena:
+                  type: string
+                  format: password
+                  example: "hola"
+                puntuacion:
+                  type: int
+                  format: int32
+                  example: 1000
+      responses:
+        '201':
+          description: Usuario registrado con éxito
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionCookie:
+                    type: string
+                    description: Nombre de usuario concatenado con 16 bytes aleatorios codificados en base64 mediante el carácter slash (/)
+                    example: juan/oa3RzvErZYb8GK9AM+LZGw==
+        '400':
+          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  codigoError:
+                    type: int
+                    description: 0 si los parámetros 'contrasena' y 'confirmacionContrasena' no coinciden. 1 si la contraseña no es suficientemente segura
+                    example: 1
+                  mensajeError:
+                    type: string
+                    description: Mensaje para mostrar al usuario.
+                    example: La contraseña no es suficientemente segura. Por favor, asegúrate de que tiene más de 8 caracteres
+        '409':
+          description: Ya existe ese nombre de usuario
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                   errorDescription:
+                    type: string
+                    example: El nombre de usuario ya existe
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
+  /usuario/{username}/login:
+    post:
+      summary: Loguear a un usuario y registrar una nueva puntuación
+      parameters:
+        - name: usuario
+          in: path
+          requred: true
+          schema:
+            type: string
+            example: "Juan"
+          description: El nombre del usuario tal y como está almacenado en la base de datos
+      requestBody:
+        description: Formato para enviar un POST de login
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                usuario:
+                  type: string
+                  example: "Juan"
+                contrasena:
+                  type: string
+                  format: password
+                  example: "hola"
+                puntuacion:
+                  type: int
+                  format: int32
+                  example: 1000
+      responses:
+        '200':
+          description: Se ha iniciado una nueva sesión
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sessionCookie:
+                    type: string
+                    description: Nombre de usuario concatenado con 16 bytes aleatorios codificados en base64 mediante el carácter slash (/)
+                    example: juan/oa3RzvErZYb8GK9AM+LZGw==
+        '400':
+          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Falta nombre de usuario o la contraseña"
+        '401':
+          description: Petición desautorizada 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Contraseña incorrecta"
+        '404':
+          description: Error si el nombre de usuario no está registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Usuario no encontrado"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"               
+  /usuario/{username}:
+    post:
+      summary: Registrar una nueva puntuación de un usuario logueado
+      parameters:
+        - name: tokenSesion
+          in: header
+          required: false
+          description: Token de sesión devuelto en la petición de login o en la de registro
+      requestBody:
+        description: Formato para enviar un POST de registro de puntuación
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                puntuacion:
+                  type: int
+                  format: int32
+                  example: 1000
+      responses:
+        '201':
+          description: Se ha registrado una nueva puntuación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mensaje:
+                    type: string
+                    description: Mensaje individual.
+                    example: "Has batido tu propio record. ¡Enhorabuena!"
+        '401':
+          description: Error si el token de sesión es incorrecto, no está presente o ha caducado. La aplicación cliente puede optar por lanzar de nuevo la petición de login e intentar publicar de nuevo la puntuación
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: El token de sesión no es válido
+        '404':
+          description: Error si el nombre de usuario no está registrado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Usuario no encontrado"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
+  /tormentorxubermosh:
+    get:
+      summary: Devuelve una lista de usuarios
+      responses:
+        '200':
+          description: Lista de todos los usuarios
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    nombre:
+                      type: string
+                      example: Juan
+                    puntuacion:
+                      type: int
+                      example: 1000
+        '400':
+          description: Algún parámetro no ha podido ser correctamente interpretado por el servidor, o la petición está mal formada
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"
+        '404':
+          description: La lista no existe
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "No se ha encontrado la lista"
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorDescription:
+                    type: string
+                    example: "Inténtalo de nuevo más tarde"

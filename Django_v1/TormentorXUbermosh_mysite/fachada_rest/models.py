@@ -7,7 +7,6 @@ class Usuarios(models.Model):
     salt = models.BinaryField()
     tokenSesion = models.CharField(max_length=200)
     verificado = models.BooleanField(default=False)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         representacion_en_string = self.nombre
