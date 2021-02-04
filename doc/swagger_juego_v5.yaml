@@ -58,7 +58,7 @@ paths:
               schema:
                 type: object
                 properties:
-                   errorDescription:
+                  errorDescription:
                     type: string
                     example: El nombre de usuario ya existe o la contraseña es incorrecta
         '500':
@@ -68,7 +68,7 @@ paths:
               schema:
                 type: object
                 properties:
-                 errorDescription:
+                  errorDescription:
                     type: string
                     example: "Inténtalo de nuevo más tarde"
   /usuario/{username}
@@ -81,7 +81,7 @@ paths:
           schema:
             type: string
             example: "Juan"
-          description: El nombre del usuario tal y como está almacenado en la base de datos
+            description: El nombre del usuario tal y como está almacenado en la base de datos
       requestBody:
         description: Formato para enviar un POST de login
         required: true
