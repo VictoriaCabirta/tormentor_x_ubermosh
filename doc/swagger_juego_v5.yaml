@@ -71,7 +71,7 @@ paths:
                   errorDescription:
                     type: string
                     example: "Inténtalo de nuevo más tarde"
-  /usuario/{username}
+  /usuario/{username}:
     post:
       summary: Registrar una nueva puntuación de un usuario registrado:
       parameters:
