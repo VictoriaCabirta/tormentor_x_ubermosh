@@ -21,8 +21,7 @@ public class ControladorMenu : MonoBehaviour
             }
             else
             {
-                menuOpciones.SetActive(true);
-                pausado = true;
+                BotonPausa();
             }
 
 
@@ -48,6 +47,12 @@ public class ControladorMenu : MonoBehaviour
     {
         menuOpciones.SetActive(false);
         pausado = false;
+    }
+
+    public void BotonPausa()
+    {
+        menuOpciones.SetActive(true);
+        pausado = true;
     }
 
 }
