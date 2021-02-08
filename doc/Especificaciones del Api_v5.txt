@@ -11,7 +11,7 @@ POST /Usuario/{username}
 	{"Puntuacion":1000}
 
 · Ver la tabla de puntuaciones globales:
-GET /tormentorxubermosh
+GET /Puntuacion
 	[
 	{"Nombre":"Juan",
 	"Puntuacion":1000}
