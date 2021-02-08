@@ -4379,6 +4379,7 @@ MonoBehaviour:
   textNombre: {fileID: 1121714719}
   textContr: {fileID: 57987447}
   NuevoUsuario: {fileID: 1529229373}
+  punt: {fileID: 428633121}
 --- !u!114 &1357582423
 MonoBehaviour:
   m_ObjectHideFlags: 0

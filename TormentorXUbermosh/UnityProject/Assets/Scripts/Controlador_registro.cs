@@ -11,12 +11,11 @@ public class Controlador_registro : MonoBehaviour {
 	public GameObject menuMuerte , registro, subPunt;
 	public TMP_InputField textNombre, textContr;
 	public Toggle NuevoUsuario;
-
 	public TextMeshProUGUI punt;
 
-	int puntuacion = 0;
-
+	//0 == No existe Usuario
 	string postURL0 = "https://reqres.in/api/users";
+	//1 == Existe Usuario
 	string postURL1 = "https://reqres.in/api/users";
 
 	public void Registrarse(){
@@ -31,6 +30,7 @@ public class Controlador_registro : MonoBehaviour {
 
 	public void EnviarUsuario()
 	{
+
 		registro.SetActive(false);
 		subPunt.SetActive(true);
 
@@ -56,6 +56,7 @@ public class Controlador_registro : MonoBehaviour {
 		}
 
 		NoSubirPuntuacion();
+
     }
 
 	public void NoSubirPuntuacion()
@@ -64,24 +65,45 @@ public class Controlador_registro : MonoBehaviour {
 		menuMuerte.SetActive(true);
 	}
 
-
-
 	public void PrepararJSON(int tipo)
 	{
-		//ClaseUsuario usr = new ClaseUsuario();
+		string json;
+		if (tipo == 0)
+        {
 
-		ClaseUsuario usr = new ClaseUsuario()
-		{
-			nombre = textNombre.text,
-			contrasena = textContr.text,
-			puntuacion = int.Parse(punt.text)
-		};
+			ClaseUsuario usr = new ClaseUsuario();
 
-		string json = JsonUtility.ToJson(usr);
+			usr = new ClaseUsuario()
+			{
+				nombre = textNombre.text,
+				contrasena = textContr.text,
+				puntuacion = int.Parse(punt.text)
+			};
 
-		Debug.Log(json);
+			json = JsonUtility.ToJson(usr);
 
-		//StartCoroutine(SimplePostRequest(json, tipo));
+			Debug.Log(json);
+
+		}
+        else
+        {
+
+			postURL1 += "/" + textNombre.text;
+
+			ClasePuntuacion usr = new ClasePuntuacion()
+			{
+				puntuacion = int.Parse(punt.text)
+			};
+
+
+			json = JsonUtility.ToJson(usr);
+
+			Debug.Log(json);
+			Debug.Log(postURL1);
+
+		}
+
+		StartCoroutine(SimplePostRequest(json, tipo));
 
 	}
 
