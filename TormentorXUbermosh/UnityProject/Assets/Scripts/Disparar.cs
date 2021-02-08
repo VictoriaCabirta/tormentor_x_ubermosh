@@ -26,6 +26,7 @@ public class Disparar : MonoBehaviour
     Joystick joystickArma;
     public GameObject fondoArma;
     AudioSource sourceDisparo;
+    EsPC EsPC;
     //public AudioClip clipDisparo;
 
     #endregion
@@ -36,15 +37,19 @@ public class Disparar : MonoBehaviour
 
         //Le decimos fijo que tine que buscar este componente
         ControladorMenu = GameObject.FindWithTag("MenuP").GetComponent<ControladorMenu>();
-        joystickArma = GameObject.FindGameObjectWithTag("JoystickDisparo").GetComponent<Joystick>();
 
         //En relacion a si es player o enemigo, toma una accion u otra
         #region DifPlayerEnemigo
-        //Si es le player (buscara el sonido) o si es el enemigo (buscara la posicion del player)
+        //Si es le player (buscara el sonido, el GameObject de los joysticks y el controlador de si es PC) o si es el enemigo (buscara la posicion del player)
         if (!player)
             posicionJugador = GameObject.FindWithTag("Player").GetComponent<Transform>();
         else
+        {
             sourceDisparo = GetComponent<AudioSource>();
+            EsPC = GameObject.FindGameObjectWithTag("EsPC").GetComponent<EsPC>();
+            joystickArma = GameObject.FindGameObjectWithTag("JoystickDisparo").GetComponent<Joystick>();
+        }
+            
         #endregion
 
     }
@@ -65,9 +70,10 @@ public class Disparar : MonoBehaviour
         }
         else
         {
-
-            direccion = joystickArma.Direction;
-            //direccion = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            if (EsPC.esPC)
+                direccion = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            else
+                direccion = joystickArma.Direction;
         }
         #endregion
 
@@ -86,19 +92,17 @@ public class Disparar : MonoBehaviour
                 }
                 else
                 {
-
-                    if (fondoArma.activeSelf)
+                    if (EsPC.esPC)
+                    {
+                        //Si el player dispara, se genera la bala y el sonido del siparo
+                        if (Input.GetMouseButtonDown(0))
+                        {
+                            Disparo();
+                        }
+                    }
+                    else if (fondoArma.activeSelf)
                     {
                         Disparo();
-                    }
-
-
-                    //Si el player dispara, se genera la bala y el sonido del siparo
-                    if (Input.GetMouseButtonDown(0))
-                    {
-                        
-                        //Disparo();
-
                     }
                 }
             }

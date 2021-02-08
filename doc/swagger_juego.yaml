@@ -70,7 +70,7 @@ paths:
                 usuario:
                   type: string
                   example: "Juan"
-                contraseña:
+                contrasena:
                   type: string
                   format: password
                   example: "hola"
@@ -139,7 +139,7 @@ paths:
             schema:
               type: object
               properties:
-                contraseña:
+                contrasena:
                   type: string
                   format: password
                   example: "hola"
