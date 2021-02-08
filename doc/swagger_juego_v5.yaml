@@ -126,7 +126,7 @@ paths:
                   errorDescription:
                     type: string
                     example: "Inténtalo de nuevo más tarde"                       
-  /tormentorxubermosh:
+  /puntuacion:
     get:
       summary: Devuelve una lista de usuarios
       responses:
