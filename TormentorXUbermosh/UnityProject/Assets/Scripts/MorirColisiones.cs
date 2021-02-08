@@ -1,6 +1,7 @@
 /*using System.Collections;
 using System.Collections.Generic;*/
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,7 +11,8 @@ public class MorirColisiones : MonoBehaviour
     //Variables que uso
     #region Variables
     public int puntos = 10;
-    public Text puntosText;
+    //public TextMeshPro puntosText;
+    public TextMeshProUGUI puntosText;
 
     public GameObject muerte;
 
@@ -30,7 +32,7 @@ public class MorirColisiones : MonoBehaviour
         //Le dices a la variable a que hace referencia en concreto (mas que nada por los prefabs)
         ControladorMenu = GameObject.FindWithTag("MenuP").GetComponent<ControladorMenu>();
         MorirSonidos = GameObject.FindWithTag("MenuP").GetComponent<MorirSonidos>();
-        puntosText = GameObject.FindGameObjectWithTag("Puntuacion").GetComponent<Text>();
+        puntosText = GameObject.FindGameObjectWithTag("Puntuacion").GetComponent<TextMeshProUGUI>();
     }
 
     //Metodos que se activan de distintas formas, dependiendo de a que objeto pertenece este script y el numero asignado
