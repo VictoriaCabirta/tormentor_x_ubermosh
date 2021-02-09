@@ -7,5 +7,4 @@ class Usuarios(models.Model):
     contrasena = models.BinaryField(null=True)
     
 
-def __str__(self):
-		return self.nombre
+
