@@ -1,8 +1,10 @@
 import json
-
 from .models import Usuarios
 
 from django.http import HttpResponse,HttpResponseNotAllowed, JsonResponse
+
+from django.http import HttpResponseNotAllowed, JsonResponse
+
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
