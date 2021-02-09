@@ -31,28 +31,30 @@ def ordenar_json(punt):
 	return punt["puntuacion"]
 
 @csrf_exempt
-def login(request, usuario):
+def subirPuntuacion(request, nombre):
 	#Es POST?, si no lo es devuelve un error
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
 	# Coje un usuario y mira si existe, y si no existe salta el  404
 	try: 
-		usuario = Usuarios.objects.get(nombre__exact=usuario)
+		usuario = Usuarios.objects.get(nombre__exact=nombre)
 	except Usuarios.DoesNotExist:
 		return JsonResponse({"errorDescription": "Usuario no encontrado, prueba a registrarte o inténtalo más tarde"}, status=404)
 
 	cuerpo_solicitud = json.loads(request.body)
-	contrasenaPeticion = cuerpo_solicitud.get('password')
+	contrasenaPeticion = cuerpo_solicitud.get('contrasena')
+	puntuacion = cuerpo_solicitud.get('puntuacion')
 	contrasenaBBDD = usuario.contrasena
-
+	puntuacionBBDD= usuario.puntuacion
+	print (contrasenaBBDD)
+	print (contrasenaPeticion)
 	if contrasenaPeticion == contrasenaBBDD:
-		# Genero un token de sesion
-		random = secrets.token_urlsafe(64)
-		respuesta = {"session_cookie": random}
-		usuario.token_sesion = random
-		usuario.save()
-		return JsonResponse(mi_respuesta, status=200)
-		
+		if puntuacionBBDD<puntuacion:
+			usuario.puntuacion=puntuacion
+			usuario.save()
+			return JsonResponse({"Description":"actualizado correctamente" }, status=200)
+		else :
+			return JsonResponse({"Description":"la puntuación no ha mejorado"}, status=200)
 	return JsonResponse({"errorDescription": "Contraseña incorrecta"}, status=401)
 
 @csrf_exempt
