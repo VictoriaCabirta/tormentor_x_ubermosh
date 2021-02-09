@@ -1,10 +1,8 @@
 import json
+import os
+import hashlib
 from .models import Usuarios
-
-from django.http import HttpResponse,HttpResponseNotAllowed, JsonResponse
-
 from django.http import HttpResponseNotAllowed, JsonResponse
-
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
@@ -33,34 +31,28 @@ def ordenar_json(punt):
 	return punt["puntuacion"]
 
 @csrf_exempt
-def subirPuntuacion(request, nombre):
+def subirPuntuacion(request, username):
 	#Es POST?, si no lo es devuelve un error
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
-	# Coje un usuario y mira si existe, y si no existe salta el  404
+
+	cuerpo_solicitud = json.loads(request.body)
+	puntuacion = cuerpo_solicitud.get('puntuacion')
 	try: 
-		usuario = Usuarios.objects.get(nombre__exact=nombre)
+		usuario=Usuarios.objects.get(nombre__iexact=username)
 	except Usuarios.DoesNotExist:
 		return JsonResponse({"errorDescription": "Usuario no encontrado, prueba a registrarte o inténtalo más tarde"}, status=404)
 
-	cuerpo_solicitud = json.loads(request.body)
-	contrasenaPeticion = cuerpo_solicitud.get('contrasena')
-	puntuacion = cuerpo_solicitud.get('puntuacion')
-	contrasenaBBDD = usuario.contrasena
-	puntuacionBBDD= usuario.puntuacion
-	print (contrasenaBBDD)
-	print (contrasenaPeticion)
-	if contrasenaPeticion == contrasenaBBDD:
-		if puntuacionBBDD<puntuacion:
-			usuario.puntuacion=puntuacion
-			usuario.save()
-			return JsonResponse({"Description":"actualizado correctamente" }, status=200)
-		else :
-			return JsonResponse({"Description":"la puntuación no ha mejorado"}, status=200)
-	return JsonResponse({"errorDescription": "Contraseña incorrecta"}, status=401)
+	puntuacionBBDD=usuario.puntuacion
+	if puntuacionBBDD<puntuacion:
+		usuario.puntuacion=puntuacion
+		usuario.save()
+		return JsonResponse({"Description":"Has batido tu propio record. ¡Enhorabuena!" }, status=200)
+	else :
+		return JsonResponse({"Description":"La puntuación no ha mejorado"}, status=200)
+
 
 @csrf_exempt
-
 def registro(request):
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
@@ -70,9 +62,25 @@ def registro(request):
 	puntuacion=cuerpo_solicitud.get('puntuacion')
 	try:
 		usuario=Usuarios.objects.get(nombre__iexact=nombre)
-		return JsonResponse({"errorDescription":"Nombre de usuario ya existe"},status=422)
+		contrasenaBBDD = usuario.contrasena_hmac
+		puntuacionBBDD = usuario.puntuacion
+		print (contrasenaBBDD)
+		print (contrasenaPeticion)
+		if _calcular_contrasena_hmac(contrasenaPeticion, usuario.salt) == contrasenaBBDD:
+			if puntuacionBBDD<puntuacion:
+				usuario.puntuacion=puntuacion
+				usuario.save()
+				return JsonResponse({"Description":"Actualizado correctamente" }, status=200)
+			else :
+				return JsonResponse({"Description":"La puntuación no ha mejorado"}, status=200)
+		return JsonResponse({"errorDescription":"Nombre de usuario ya existe o contraseña incorrecta"},status=422)
 	except Usuarios.DoesNotExist:
-		nuevo_usuario= Usuarios(nombre=nombre,contrasena=contrasenaPeticion, puntuacion= puntuacion)
+		salt = os.urandom(32)
+		contrasena_hmac = _calcular_contrasena_hmac(contrasenaPeticion, salt)
+		nuevo_usuario= Usuarios(nombre=nombre,contrasena_hmac=contrasena_hmac,salt=salt,puntuacion= puntuacion)
 		nuevo_usuario.save()
 		return JsonResponse({"Description":"Usuario creado correctamente"},status=201)
 
+def _calcular_contrasena_hmac(contrasena_sin_cifrar, salt):
+	# Véase https://nitratine.net/blog/post/how-to-hash-passwords-in-python/
+	return hashlib.pbkdf2_hmac('sha256', contrasena_sin_cifrar.encode('utf-8'), salt, 100000)
