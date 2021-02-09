@@ -2,7 +2,7 @@ import json
 import os
 import hashlib
 from .models import Usuarios
-from django.http import HttpResponseNotAllowed, JsonResponse
+from django.http import HttpResponse,HttpResponseNotAllowed, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 @csrf_exempt
@@ -31,18 +31,18 @@ def ordenar_json(punt):
 	return punt["puntuacion"]
 
 @csrf_exempt
-def subirPuntuacion(request, username):
+def subirPuntuacion(request, nombre):
 	#Es POST?, si no lo es devuelve un error
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
 
-	cuerpo_solicitud = json.loads(request.body)
-	puntuacion = cuerpo_solicitud.get('puntuacion')
 	try: 
-		usuario=Usuarios.objects.get(nombre__iexact=username)
+		usuario = Usuarios.objects.get(nombre__exact=nombre)
 	except Usuarios.DoesNotExist:
 		return JsonResponse({"errorDescription": "Usuario no encontrado, prueba a registrarte o inténtalo más tarde"}, status=404)
-
+	
+	cuerpo_solicitud = json.loads(request.body)
+	puntuacion = cuerpo_solicitud.get('puntuacion')
 	puntuacionBBDD=usuario.puntuacion
 	if puntuacionBBDD<puntuacion:
 		usuario.puntuacion=puntuacion
