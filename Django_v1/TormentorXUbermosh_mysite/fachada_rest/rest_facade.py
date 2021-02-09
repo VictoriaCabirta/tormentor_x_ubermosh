@@ -58,22 +58,17 @@ def login(request, usuario):
 @csrf_exempt
 
 def registro(request):
-	# Si recibimos una peticion que no es POST, devolvemos un 405
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
+	cuerpo_solicitud = json.loads(request.body)
+	nombre= cuerpo_solicitud.get('usuario')
+	contrasenaPeticion = cuerpo_solicitud.get('contrasena')
+	puntuacion=cuerpo_solicitud.get('puntuacion')
 	try:
-		usuario=Usuarios.objects.get(nombre__exact=nombre)
-		return JsonResponse(("Nombre de usuario ya existe"),status=422)
+		usuario=Usuarios.objects.get(nombre__iexact=nombre)
+		return JsonResponse({"errorDescription":"Nombre de usuario ya existe"},status=422)
 	except Usuarios.DoesNotExist:
-		#obtener la contraseña que quieres asignar
-		cuerpo_solicitud = json.loads(request.body)
-		contrasenaPeticion = cuerpo_solicitud.get('password')
-		usuario=Usuarios.get.object(nombre='')
-		#lanzar un token de sesion
-		usuario.token_sesion = random
-		usuario.save()
-		password.save()
-		return JsonResponse(("Usuario creado correctamente"),status=201)
-	return JsonResponse(("No se ha podido leer la contraseña o el nombre de usuario"),status=400)
-
+		nuevo_usuario= Usuarios(nombre=nombre,contrasena=contrasenaPeticion, puntuacion= puntuacion)
+		nuevo_usuario.save()
+		return JsonResponse({"Description":"Usuario creado correctamente"},status=201)
 
