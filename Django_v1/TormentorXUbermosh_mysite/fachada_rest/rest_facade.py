@@ -31,49 +31,46 @@ def ordenar_json(punt):
 	return punt["puntuacion"]
 
 @csrf_exempt
-def login(request, usuario):
+def subirPuntuacion(request, nombre):
 	#Es POST?, si no lo es devuelve un error
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
 	# Coje un usuario y mira si existe, y si no existe salta el  404
 	try: 
-		usuario = Usuarios.objects.get(nombre__exact=usuario)
+		usuario = Usuarios.objects.get(nombre__exact=nombre)
 	except Usuarios.DoesNotExist:
 		return JsonResponse({"errorDescription": "Usuario no encontrado, prueba a registrarte o inténtalo más tarde"}, status=404)
 
 	cuerpo_solicitud = json.loads(request.body)
-	contrasenaPeticion = cuerpo_solicitud.get('password')
+	contrasenaPeticion = cuerpo_solicitud.get('contrasena')
+	puntuacion = cuerpo_solicitud.get('puntuacion')
 	contrasenaBBDD = usuario.contrasena
-
+	puntuacionBBDD= usuario.puntuacion
+	print (contrasenaBBDD)
+	print (contrasenaPeticion)
 	if contrasenaPeticion == contrasenaBBDD:
-		# Genero un token de sesion
-		random = secrets.token_urlsafe(64)
-		respuesta = {"session_cookie": random}
-		usuario.token_sesion = random
-		usuario.save()
-		return JsonResponse(mi_respuesta, status=200)
-		
+		if puntuacionBBDD<puntuacion:
+			usuario.puntuacion=puntuacion
+			usuario.save()
+			return JsonResponse({"Description":"actualizado correctamente" }, status=200)
+		else :
+			return JsonResponse({"Description":"la puntuación no ha mejorado"}, status=200)
 	return JsonResponse({"errorDescription": "Contraseña incorrecta"}, status=401)
 
 @csrf_exempt
 
 def registro(request):
-	# Si recibimos una peticion que no es POST, devolvemos un 405
 	if request.method != 'POST':
 		return HttpResponseNotAllowed(['POST'])
+	cuerpo_solicitud = json.loads(request.body)
+	nombre= cuerpo_solicitud.get('usuario')
+	contrasenaPeticion = cuerpo_solicitud.get('contrasena')
+	puntuacion=cuerpo_solicitud.get('puntuacion')
 	try:
-		usuario=Usuarios.objects.get(nombre__exact=nombre)
-		return JsonResponse(("Nombre de usuario ya existe"),status=422)
+		usuario=Usuarios.objects.get(nombre__iexact=nombre)
+		return JsonResponse({"errorDescription":"Nombre de usuario ya existe"},status=422)
 	except Usuarios.DoesNotExist:
-		#obtener la contraseña que quieres asignar
-		cuerpo_solicitud = json.loads(request.body)
-		contrasenaPeticion = cuerpo_solicitud.get('password')
-		usuario=Usuarios.get.object(nombre='')
-		#lanzar un token de sesion
-		usuario.token_sesion = random
-		usuario.save()
-		password.save()
-		return JsonResponse(("Usuario creado correctamente"),status=201)
-	return JsonResponse(("No se ha podido leer la contraseña o el nombre de usuario"),status=400)
-
+		nuevo_usuario= Usuarios(nombre=nombre,contrasena=contrasenaPeticion, puntuacion= puntuacion)
+		nuevo_usuario.save()
+		return JsonResponse({"Description":"Usuario creado correctamente"},status=201)
 

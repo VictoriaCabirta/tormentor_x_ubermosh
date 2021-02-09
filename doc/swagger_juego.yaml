@@ -124,7 +124,7 @@ paths:
     post:
       summary: Registra una nueva puntuación de un usuario ya registrado
       parameters:
-        - name: usuario
+        - name: username
           in: path
           requred: true
           schema:
@@ -139,7 +139,7 @@ paths:
             schema:
               type: object
               properties:
-                contraseña:
+                contrasena:
                   type: string
                   format: password
                   example: "hola"
