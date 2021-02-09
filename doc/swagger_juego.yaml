@@ -139,7 +139,7 @@ paths:
             schema:
               type: object
               properties:
-                contraseña:
+                contrasena:
                   type: string
                   format: password
                   example: "hola"
