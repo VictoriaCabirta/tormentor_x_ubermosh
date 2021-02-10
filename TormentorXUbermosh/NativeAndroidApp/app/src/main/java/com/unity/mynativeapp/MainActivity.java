@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         handleIntent(getIntent());
+
     }
 
     @Override

@@ -5,7 +5,7 @@ public class Puntuacion {
     private String nom_usuario;
 
 
-    public Puntuacion(int puntuacion,String nom_usuario){
+    public Puntuacion(String nom_usuario, int puntuacion){
         this.puntuacion=puntuacion;
         this.nom_usuario=nom_usuario;
     }

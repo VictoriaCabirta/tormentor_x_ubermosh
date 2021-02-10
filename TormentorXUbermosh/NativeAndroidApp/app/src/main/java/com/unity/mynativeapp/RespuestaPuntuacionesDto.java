@@ -17,6 +17,8 @@ public class RespuestaPuntuacionesDto {
                 JSONObject puntuacionLista = jsonArray.getJSONObject(i);
                 String newNombre = puntuacionLista.getString("nombre");
                 int newPuntuacion = puntuacionLista.getInt("puntuacion");
+                //Esta linea se ha arreglado invirtiendo puntuacion y nombre(?)
+                //NOTA1: Arreglado, al momento de declarar puntuacion simplemetne se puso el orden invertido, ahora asi esta bien
                 Puntuacion puntuacion = new Puntuacion(newNombre, newPuntuacion);
                 this.Puntuacion.add(puntuacion);
             }
