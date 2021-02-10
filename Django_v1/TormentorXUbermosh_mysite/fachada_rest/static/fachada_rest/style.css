@@ -1,0 +1,28 @@
+.container, .data{
+	text-align: center;
+	font-size:100%;
+	width: 75%;
+	margin: 0 auto;
+}
+
+.container img{
+	margin: 10px;
+	width: 500px;
+	height: 100px;
+}
+.data{
+	border: 1px solid black;
+
+}
+
+.users{
+	font-size:100%;
+}
+
+.tabla{
+	justify-content: center;
+	text-align: center;
+	display: flex;
+	padding: 10px;
+	margin: 10px;
+}
