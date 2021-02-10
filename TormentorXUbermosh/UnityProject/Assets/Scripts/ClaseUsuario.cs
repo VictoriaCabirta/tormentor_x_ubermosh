@@ -1,10 +1,7 @@
-using System;
-using UnityEngine;
-
-
+[System.Serializable]
 public class ClaseUsuario// : MonoBehaviour
 {
-    public string nombre;
+    public string usuario;
     public string contrasena;
     public int puntuacion;
 

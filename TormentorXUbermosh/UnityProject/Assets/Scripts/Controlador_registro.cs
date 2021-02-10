@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using SimpleJSON;
 using TMPro;
+using System.Text;
 
 public class Controlador_registro : MonoBehaviour {
 	
@@ -14,9 +15,11 @@ public class Controlador_registro : MonoBehaviour {
 	public TextMeshProUGUI punt;
 
 	//0 == No existe Usuario
-	string postURL0 = "https://reqres.in/api/users";
+	//string postURL0 = "https://reqres.in/api/users";
+	string postURL0 = "https://127.0.0.1:8000/usuario";
 	//1 == Existe Usuario
-	string postURL1 = "https://reqres.in/api/users";
+	//string postURL1 = "https://reqres.in/api/users";
+	string postURL1 = "http://127.0.0.1:8000/usuario";
 
 	public void Registrarse(){
 		menuMuerte.SetActive(false);
@@ -38,6 +41,7 @@ public class Controlador_registro : MonoBehaviour {
 		Debug.Log(textContr.text);
 
 	}
+
 
 	public void SubirPuntuacion()
     {
@@ -67,7 +71,7 @@ public class Controlador_registro : MonoBehaviour {
 
 	public void PrepararJSON(int tipo)
 	{
-		string json;
+		/*string json;
 		if (tipo == 0)
         {
 
@@ -75,7 +79,7 @@ public class Controlador_registro : MonoBehaviour {
 
 			usr = new ClaseUsuario()
 			{
-				nombre = textNombre.text,
+				usuario = textNombre.text,
 				contrasena = textContr.text,
 				puntuacion = int.Parse(punt.text)
 			};
@@ -95,25 +99,131 @@ public class Controlador_registro : MonoBehaviour {
 				puntuacion = int.Parse(punt.text)
 			};
 
-
 			json = JsonUtility.ToJson(usr);
 
 			Debug.Log(json);
 			Debug.Log(postURL1);
 
-		}
+		}*/
 
-		StartCoroutine(SimplePostRequest(json, tipo));
+		//StartCoroutine(SimplePostRequest(json, tipo));
+
+		//StartCoroutine(Upload());
+		StartCoroutine(CallLogin(postURL0));
+
+		/*WWWForm formDate = new WWWForm();
+		formDate.AddField("usuario", "qe");
+		formDate.AddField("contrasena", "1234");
+		formDate.AddField("puntuacion", 132);
+
+		WWW www = new WWW(postURL0, formDate);
+
+		Debug.Log(formDate);
+
+		StartCoroutine(request(www));*/
+
+
 
 	}
 
-	[System.Obsolete]
+
+	IEnumerator Upload()
+	{
+		WWWForm form = new WWWForm();
+		form.AddField("usuario", "qe");
+		form.AddField("contrasena", "1234");
+		form.AddField("puntuacion", 132);
+
+		UnityWebRequest www = UnityWebRequest.Post("http://127.0.0.1:8000/usuario", form);
+		yield return www.SendWebRequest();
+
+		if (www.isNetworkError || www.isHttpError)
+		{
+			Debug.LogError(www.error);
+			Debug.LogError(form.headers);
+			//Debug.LogError(form.data);
+		}
+		else
+		{
+			Debug.Log("Form upload complete!");
+			Debug.Log(form.ToString());
+			Debug.Log(form.data);
+		}
+	}
+
+
+	public IEnumerator CallLogin(string url)
+	{
+
+		ClaseUsuario usr = new ClaseUsuario();
+
+		usr = new ClaseUsuario()
+		{
+			usuario = textNombre.text,
+			contrasena = textContr.text,
+			puntuacion = int.Parse(punt.text)
+		};
+
+		string json = JsonUtility.ToJson(usr);
+
+		var request = new UnityWebRequest(url, "POST");
+		request.chunkedTransfer = false;
+		byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
+		request.uploadHandler = (UploadHandler)new UploadHandlerRaw(bodyRaw);
+		request.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+		request.SetRequestHeader("Content-Type", "application/json");
+		yield return request.SendWebRequest();
+
+		if (request.error != null)
+		{
+			Debug.LogError("Error");
+			//Debug.LogError("Erro: " + www.error);
+		}
+		else
+		{
+			Debug.Log("All OK");
+			Debug.Log("Status Code: " + request.responseCode);
+		}
+
+	}
+
+	IEnumerator request (WWW www)
+    {
+		yield return www;
+
+		Debug.Log("enviado");
+
+	}
+
+
 	IEnumerator SimplePostRequest(string json, int tipo)
 	{
 
+		/*WWWForm form = new WWWForm();
+		form.AddField("myField", "myData");
+
+		using (UnityWebRequest www = UnityWebRequest.Post("http://www.my-server.com/myform", form))
+		{
+			yield return www.SendWebRequest();
+
+			if (www.isNetworkError || www.isHttpError)
+			{
+				Debug.Log(www.error);
+			}
+			else
+			{
+				Debug.Log("Form upload complete!");
+			}
+		}*/
+
+
 		List<IMultipartFormSection> WWWForm = new List<IMultipartFormSection>();
 
+
+
 		WWWForm.Add(new MultipartFormDataSection("Usuario", json));
+
+
 
 		string postURL = null;
 
@@ -122,19 +232,29 @@ public class Controlador_registro : MonoBehaviour {
 		else
 			postURL = postURL1;
 
+
+
 		UnityWebRequest www = UnityWebRequest.Post(postURL, WWWForm);
+
 
 		yield return www.SendWebRequest();
 
 		if (www.isNetworkError || www.isHttpError)
 		{
 			Debug.LogError(www.error);
+			Debug.LogError("Fallo fatal");
 		}
 		else
 		{
 			Debug.Log(www.downloadHandler.text);
 			Debug.Log("Peticion completada satisfactoriamente");
 		}
+
+		/*if (UnityWebRequest.Result == UnityWebRequest.Result.ConnectionError || UnityWebRequest.Result == UnityWebRequest.Result.ProtocolError)
+		{
+			Debug.LogError(www.error);
+		}*/
+
 	}
 
 }
