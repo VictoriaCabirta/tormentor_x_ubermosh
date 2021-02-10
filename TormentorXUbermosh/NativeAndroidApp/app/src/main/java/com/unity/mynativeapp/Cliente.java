@@ -1,6 +1,9 @@
 package com.unity.mynativeapp;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -8,7 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.unity.mynativeapp.Manejadores.ManejadorRegistro;
+
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,57 +27,54 @@ public class Cliente {
         this.queue = Volley.newRequestQueue(context);
     }
 
-
-// solicita el registro
-    public void solicitarRegistro(String nombreUsuario, String contrasena, ManejadorRegistro handler) {
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+//subir puntuacion
+    private void subirPunt() {
+        final AlertDialog alertaCargando = AlertaCargando();
+        alertaCargando.show();
+        JSONObject cuerpoPeticion = generarJson();
+        JsonObjectRequest laPeticionQueVoyAMandar = new JsonObjectRequest(
                 Request.Method.POST,
-                servidor + "/usuario",
-                crearCuerpoPeticion(nombreUsuario, contrasena),
-
+                servidor + "/score/<usuario>",
+                cuerpoPeticion,
                 new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
-                        try {
-                            String descripcion = response.get("Description").toString();
-                            handler.registroExitoso(token);
-                        } catch (JSONException e) {
-                            throw new RuntimeException();
-                        }
+                        alertaCargando.hide();
+                        SharedPreferences.Editor editor = getSharedPreferences(NombrePreferences, Context.MODE_PRIVATE).edit();
                     }
-                }, new Response.ErrorListener() {
-
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                if(error.networkResponse.data != null) {
-                    try {
-                        String cuerpoRespuesta = new String(error.networkResponse.data,"UTF-8");
-                        JSONObject json = new JSONObject(cuerpoRespuesta);
-                        String mensajeError = json.get("mensajeError").toString();
-                        System.out.println(mensajeError);
-                        handler.registroFallido(mensajeError);
-                    } catch (UnsupportedEncodingException | JSONException e) {
-                        throw new RuntimeException();
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        alertaCargando.hide();
+                        error.printStackTrace();
                     }
                 }
-            }
-        });
-        queue.add(jsonObjectRequest);
-    }
-    //Esto crea un cuerpo de petición para usarlo después en solic registro
-    private JSONObject crearCuerpoPeticion(String nombreUsuario, String contrasena) {
-        JSONObject cuerpoPeticion = new JSONObject();
-        try {
-            cuerpoPeticion.put("nombreUsuario", nombreUsuario);
-            cuerpoPeticion.put("contrasena", contrasena);
-            return cuerpoPeticion;
-        } catch (JSONException e) {
-            throw new RuntimeException();
-        }
+        );
+
+        RequestQueue queue = Volley.newRequestQueue(this);
+        queue.add(laPeticionQueVoyAMandar);
     }
 
+    private JSONObject generarJson() {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("name", nombre);
+            jsonObject.put("puntuación", puntuacion);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    private AlertDialog AlertaCargando() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Publicando puntuación...");
+        builder.setCancelable(false);
+        return builder.create();
+    }
+
+  
 
 
 
