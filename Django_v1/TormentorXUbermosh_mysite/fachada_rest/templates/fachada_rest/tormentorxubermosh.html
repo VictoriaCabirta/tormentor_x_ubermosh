@@ -8,7 +8,7 @@
 		{% if usuarios_list %}
 		<ul>
 			{% for usuarios in usuarios_list %}
-			<li><a href="/fachada_rest/{usuarios.id}">{{ usuarios.nombre }}</a></li>
+			<li><a href="/fachada_rest/{usuarios.id}">{{ usuarios.nombre } { usuarios.puntuacion }}</a></li>
 			{% endfor %}
 		</ul>
 		{% else %}
