@@ -8,7 +8,7 @@ SECRET_KEY = '$7jsxvusl&1^-(6@-u3y=e!!0df@f$o#o(z9b)qt=vl1gzz@e)'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_ALL_ORIGINS = DEBUG
 

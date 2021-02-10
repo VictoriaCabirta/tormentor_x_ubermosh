@@ -4,7 +4,7 @@ public class RespuestaPuntuacionesDto {
     private int puntuacion;
 
 
-    public RespuestaPuntuacionesDto(int puntuacion,String nom_usuario,String contrasena){
+    public RespuestaPuntuacionesDto(int puntuacion){
         this.puntuacion=puntuacion;
     }
 
