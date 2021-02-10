@@ -1,8 +1,7 @@
-package com.unity.mynativeapp;
+package com.unity.mynativeapp.clienteYDto;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 
 import com.android.volley.Request;
@@ -15,8 +14,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 
 
 public class Cliente {
