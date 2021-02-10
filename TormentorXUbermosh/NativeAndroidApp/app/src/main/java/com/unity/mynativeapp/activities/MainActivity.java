@@ -1,4 +1,4 @@
-package com.unity.mynativeapp;
+package com.unity.mynativeapp.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
+
+import com.unity.mynativeapp.MainUnityActivity;
+import com.unity.mynativeapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,4 +85,10 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
         finishAffinity();
     }
+
+    public void onClickPuntuaciones(View v) {
+        Intent intent = new Intent(this, PuntuacionesActivity.class);
+        startActivity(intent);
+    }
+
 }

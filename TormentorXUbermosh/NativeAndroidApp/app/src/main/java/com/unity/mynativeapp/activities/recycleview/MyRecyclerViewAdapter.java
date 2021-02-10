@@ -9,25 +9,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.unity.mynativeapp.R;
+import com.unity.mynativeapp.clienteYDto.dtos.ListaPuntuacionesDto;
+import com.unity.mynativeapp.clienteYDto.dtos.PuntuacionesDto;
 
 import java.util.List;
 
 public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
+    private ListaPuntuacionesDto listaPuntuacionesDto;
 
-    // private RespuestaComidasDto miDtoConLosDatosMasticados;
-    private List<String> allTheData;
-
-    /**
-     * Método constructor
-     */
-    public MyRecyclerViewAdapter(List<String> dataSet) {
-        this.allTheData = dataSet;
+    public MyRecyclerViewAdapter(ListaPuntuacionesDto dataSet) {
+        this.listaPuntuacionesDto = dataSet;
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // Create a new view, which defines the UI of the list item
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.recycler_view_cell, parent, false);
         System.out.println("He creado un nuevo view holder");
@@ -36,14 +32,14 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        TextView elTextViewDeLaCelda = holder.getTextView();
-        String elTextoEnNuestroDatasetCorrespondienteALaPosicion = allTheData.get(position);
-        elTextViewDeLaCelda.setText(elTextoEnNuestroDatasetCorrespondienteALaPosicion);
-        System.out.println("Estoy pintando la posicion " + position + " en un view holder");
+        PuntuacionesDto infoPuntuaciones = listaPuntuacionesDto.getPuntuacionesMasAltas().get(position);
+        holder.getTextViewNombre().setText(infoPuntuaciones.getNom_usuario());
+        holder.getTextViewPuntuacion().setText(String.valueOf(infoPuntuaciones.getPuntuacion()));
     }
+
 
     @Override
     public int getItemCount() {
-        return allTheData.size();
+        return listaPuntuacionesDto.getPuntuacionesMasAltas().size();
     }
 }

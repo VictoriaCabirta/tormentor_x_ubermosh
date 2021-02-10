@@ -2,12 +2,10 @@ package com.unity.mynativeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Process;
-import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.company.product.OverrideUnityActivity;
+import com.unity.mynativeapp.activities.MainActivity;
 
 public class MainUnityActivity extends OverrideUnityActivity {
     // Setup activity layout
