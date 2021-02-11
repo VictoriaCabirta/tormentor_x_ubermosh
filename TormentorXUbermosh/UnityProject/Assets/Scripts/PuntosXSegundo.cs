@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PuntosXSegundo : MonoBehaviour
 {
@@ -7,10 +8,15 @@ public class PuntosXSegundo : MonoBehaviour
     #region Variables
     public ControladorMenu ControladorMenu;
 
-    public Text texto;
+    TextMeshProUGUI texto;
     
     private float contador = 0, i = 0;
     #endregion
+
+    void Awake()
+    {
+        texto = GetComponent<TextMeshProUGUI>();
+    }
 
     // Update is called once per frame
     void Update()

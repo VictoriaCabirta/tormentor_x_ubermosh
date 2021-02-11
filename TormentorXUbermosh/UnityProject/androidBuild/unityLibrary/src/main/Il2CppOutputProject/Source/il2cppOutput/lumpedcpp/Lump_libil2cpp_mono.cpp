@@ -1,0 +1,7 @@
+#include "il2cpp-config.h"
+#include "C:\msys64\home\the_l\juego\TormentorXUbermosh\UnityProject\androidBuild\unityLibrary\src\main\Il2CppOutputProject\IL2CPP\libil2cpp\mono\MonoPosixHelper.cpp"
+#include "C:\msys64\home\the_l\juego\TormentorXUbermosh\UnityProject\androidBuild\unityLibrary\src\main\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\ThreadPoolMonitorThread.cpp"
+#include "C:\msys64\home\the_l\juego\TormentorXUbermosh\UnityProject\androidBuild\unityLibrary\src\main\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\ThreadPoolWorkerThread.cpp"
+#include "C:\msys64\home\the_l\juego\TormentorXUbermosh\UnityProject\androidBuild\unityLibrary\src\main\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\threadpool-ms-io-poll.cpp"
+#include "C:\msys64\home\the_l\juego\TormentorXUbermosh\UnityProject\androidBuild\unityLibrary\src\main\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\threadpool-ms-io.cpp"
+#include "C:\msys64\home\the_l\juego\TormentorXUbermosh\UnityProject\androidBuild\unityLibrary\src\main\Il2CppOutputProject\IL2CPP\libil2cpp\mono\ThreadPool\threadpool-ms.cpp"
