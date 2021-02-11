@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="350dp"
-        android:onClick="btnUnloadUnity"
+        android:onClick="onClickPuntuaciones"
         android:text="Ver puntuaciones generales"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

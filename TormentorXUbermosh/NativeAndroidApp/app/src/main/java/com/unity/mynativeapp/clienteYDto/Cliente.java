@@ -8,7 +8,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.unity.mynativeapp.clienteYDto.dtos.ListaPuntuacionesDto;
 import com.unity.mynativeapp.clienteYDto.dtos.PuntuacionesDto;
@@ -36,7 +35,7 @@ public class Cliente {
         return cliente;
     }
 
-    public void obtenerPuntuaciones(ManejadorRespuestaPuntuaciones handler) {
+    public void obtenerPuntuaciones(final ManejadorRespuestaPuntuaciones handler) {
         JsonArrayRequest jsonRequest = new JsonArrayRequest(
                 Request.Method.GET,
                 //El Get de rest_facade de Django estaba hecho para devolver la lista ya ordenada

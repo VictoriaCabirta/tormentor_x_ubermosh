@@ -1,11 +1,8 @@
 package com.unity.mynativeapp.activities.recycleview;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.unity.mynativeapp.R;
 
 public class MyViewHolder extends RecyclerView.ViewHolder {

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.unity.mynativeapp.MainUnityActivity;
@@ -22,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         handleIntent(getIntent());
     }
 
@@ -31,6 +31,11 @@ public class MainActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         handleIntent(intent);
         setIntent(intent);
+    }
+
+    public void onClickPuntuaciones(View v) {
+        Intent intent = new Intent(this, PuntuacionesActivity.class);
+        startActivity(intent);
     }
 
     void handleIntent(Intent intent) {
@@ -84,11 +89,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finishAffinity();
-    }
-
-    public void onClickPuntuaciones(View v) {
-        Intent intent = new Intent(this, PuntuacionesActivity.class);
-        startActivity(intent);
     }
 
 }

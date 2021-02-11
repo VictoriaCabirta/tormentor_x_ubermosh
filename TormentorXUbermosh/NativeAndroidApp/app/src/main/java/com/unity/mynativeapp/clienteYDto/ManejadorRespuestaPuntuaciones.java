@@ -1,9 +1,7 @@
 package com.unity.mynativeapp.clienteYDto;
-
 import com.unity.mynativeapp.clienteYDto.dtos.ListaPuntuacionesDto;
 
-public class ManejadorRespuestaPuntuaciones {
+public interface ManejadorRespuestaPuntuaciones {
     void puntuacionesObtenidas(ListaPuntuacionesDto puntDto);
     void errorOcurrido(String mensajeError);
-
 }
