@@ -1,4 +1,5 @@
 import json
+import json
 from .models import Usuarios
 
 from django.http import HttpResponse,HttpResponseNotAllowed, JsonResponse

@@ -1,0 +1,46 @@
+{% load static %}
+<link rel="stylesheet"  href="{% static 'fachada_rest/style.css' %}"/>
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>TormentorXUbermosh: Puntuaciones</title>
+	</head>
+	<body>	
+		<div class="container">
+			<img src="{% static 'fachada_rest/Banner_Cutre_TormentorxUbermosh.png' %}">	
+			<div class="data">
+				<table class="tabla">
+					<tr>
+						<th>
+							Nombre
+						</th>
+						<th>
+							Puntuación
+						</th>
+					</tr>
+					{% if usuarios_list %}
+						{% for usuarios in usuarios_list %}
+						<tr>
+							<td>
+								{{ usuarios.nombre }}
+							</td>
+							<td>
+								{{ usuarios.puntuacion }}
+							</td>
+						{% endfor %}
+						</tr>
+					{% else %}
+						<tr>
+							<td>
+								No hay puntuaciones disponibles.
+							</td>
+						</tr>
+					{% endif %}
+				</table>
+			</div>
+		</div>
+	</body>
+</html>
+
+
